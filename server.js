@@ -50,7 +50,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
     let exerciseAggregate = Exercise.aggregate()
       .match(filter)
       .project({
-        desc: 1,
+        description: 1,
         duration: 1,
         date: {
           $function: {
