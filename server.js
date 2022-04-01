@@ -147,7 +147,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
           description: exercise.description?.toString(),
           duration: exercise.duration,
           date: new Date(exercise.date).toDateString(),
-          _id: exercise._id
+          _id: user._id
         });
       });
     } else {
