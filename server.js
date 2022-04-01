@@ -39,16 +39,19 @@ app.get('/api/users/:_id/logs', (req, res) => {
     if (!user) {
       res.json({ user: user, error: err }); res.end();
     }
-    const filter = { username: user.username };
+
+    const match = { username: user.username };
     if (req.query?.from !== undefined) {
-      filter.from = { $gte: req.query.from };
+      match.from = { $gte: req.query.from };
     }
     if (req.query?.to !== undefined) {
-      filter.to = { $lte: req.query.to };
+      match.to = { $lte: req.query.to };
     }
 
+    console.log(match);
+
     let exerciseAggregate = Exercise.aggregate()
-      .match(filter)
+      .match(match)
       .project({
         description: 1,
         duration: 1,
@@ -122,7 +125,6 @@ app.route('/api/users')
  */
 app.post('/api/users/:_id/exercises', (req, res) => {
   const params = req.body;
-  console.log(params);
 
   // Find the user..
   User.findById(req.params._id, (err, user) => {
@@ -140,7 +142,6 @@ app.post('/api/users/:_id/exercises', (req, res) => {
           res.send({ error: err }); res.end();
         }
 
-        console.log(user, exercise);
         // send json response...
         res.json({
           username: exercise.username,
