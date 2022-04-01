@@ -65,7 +65,9 @@ app.get('/api/users/:_id/logs', (req, res) => {
         duration: 1,
         date: {
           $function: {
-            body: function (d) { return new Date(d).toDateString() },
+            body: function (isoDate) {
+              return new Date(d).toDateString();
+            },
             args: ["$date"],
             lang: "js"
           }
@@ -73,7 +75,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
       });
 
     if (req.query?.limit) {
-      exerciseAggregate.limit(Number(req.query?.limit));
+      exerciseAggregate.limit(Number(req.query.limit));
     }
 
     exerciseAggregate
