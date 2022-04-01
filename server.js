@@ -47,17 +47,6 @@ app.get('/api/users/:_id/logs', (req, res) => {
       filter.to = { $lte: req.query.to };
     }
 
-    // let logs = await Exercise.aggregate([
-    //   { $match: filter }, // Select conditions
-    //   {
-    //     $project: {
-    //       desc: 1,
-    //       duration: 1,
-    //       date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-    //     }
-    //   } // Fields we want selected
-    // ]);
-
     let exerciseAggregate = Exercise.aggregate()
       .match(filter)
       .project({
@@ -92,47 +81,40 @@ app.get('/api/users/:_id/logs', (req, res) => {
           logs: exercises
         });
       });
-
-    // Exercise.aggregate([
-    //   { $match: filter }, // Select conditions
-    //   {
-    //     $project: {
-    //       desc: 1,
-    //       duration: 1,
-    //       date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-    //     }
-    //   } // Fields we want selected
-    // ]).then((e, d) => {
-
-    // });
-
-    // res.json({
-    //   username: user.username,
-    //   count: logs.length,
-    //   logs: logs
-    // });
-
   });
 });
 
 /**
+ * Get all users
+ * GET /api/users
+ * 
  * Create a new user
  * POST /api/users
  */
-app.post('/api/users', (req, res) => {
-  if (req.body?.username) {
-    new User({ username: req.body?.username })
-      .save((err, user) => {
-        if (err) {
-          res.json({ error: err }); res.end();
-        }
+app.route('/api/users')
+  .get((_, res) => {
+    User.find({}, (err, users) => {
+      if (err) {
+        res.json({ error: err }); res.end();
+      }
 
-        res.json(user);
-      });
-  } else {
-    res.json({ error: "username is required." });
-  }
-});
+      res.json(users);
+    })
+  })
+  .post((req, res) => {
+    if (req.body?.username) {
+      new User({ username: req.body?.username })
+        .save((err, user) => {
+          if (err) {
+            res.json({ error: err }); res.end();
+          }
+
+          res.json(user);
+        });
+    } else {
+      res.json({ error: "username is required." });
+    }
+  });
 
 /**
  * Add exercises
