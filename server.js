@@ -125,7 +125,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   console.log(params);
 
   // Find the user..
-  User.findById(params._id, (err, user) => {
+  User.findById(params[':_id'], (err, user) => {
     if (err) {
       res.send({ error: err }); res.end();
     }
