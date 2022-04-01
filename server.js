@@ -41,11 +41,13 @@ app.get('/api/users/:_id/logs', (req, res) => {
     }
 
     const match = { username: user.username };
-    if (req.query?.from !== undefined) {
-      match.from = { $gte: req.query.from };
+    if (req.query?.from && req.query?.to) {
+      match.date = { $gte: ISODate(req.query.from), $lte: ISODate(req.query.to) };
+    } else if (req.query?.from) {
+      match.date = { $gte: ISODate(req.query.from) };
     }
-    if (req.query?.to !== undefined) {
-      match.to = { $lte: req.query.to };
+    else if (req.query?.to) {
+      match.date = { $lte: ISODate(req.query.to) };
     }
 
     console.log(match);
