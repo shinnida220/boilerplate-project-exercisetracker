@@ -132,7 +132,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
     // Lets save against the user..
     new Exercise({
-      description: params.description, date: new Date(params.date),
+      description: params.description, date: (params?.date ? new Date(params.date) : new Date()),
       duration: Number(params.duration), username: user.username
     }).save((err, exercise) => {
       if (err) {
