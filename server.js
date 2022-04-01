@@ -140,6 +140,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
           res.send({ error: err }); res.end();
         }
 
+        console.log(user, exercise);
         // send json response...
         res.json({ username: user.username, ...exercise });
       });
