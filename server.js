@@ -64,8 +64,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
           $dateToString: {
             format: "%Y-%m-%d",
             date: "$dat",
-            onNull: (new Date("$date").toDateString()),
-            onError: (new Date("$date").toDateString())
+            onNull: (new Date("$date").toDateString())
           }
         },
       });
