@@ -130,18 +130,22 @@ app.post('/api/users/:_id/exercises', (req, res) => {
       res.send({ error: err }); res.end();
     }
 
-    // Lets save against the user..
-    new Exercise({
-      description: params.description, date: (params?.date ? new Date(params.date) : new Date()),
-      duration: Number(params.duration), username: user.username
-    }).save((err, exercise) => {
-      if (err) {
-        res.send({ error: err }); res.end();
-      }
+    if (user?.username) {
+      // Lets save against the user..
+      new Exercise({
+        description: params.description, date: (params?.date ? new Date(params.date) : new Date()),
+        duration: Number(params.duration), username: user.username
+      }).save((err, exercise) => {
+        if (err) {
+          res.send({ error: err }); res.end();
+        }
 
-      // send json response...
-      res.json(exercise);
-    });
+        // send json response...
+        res.json(exercise);
+      });
+    } else {
+      res.send({ error: err }); res.end();
+    }
   });
 });
 
