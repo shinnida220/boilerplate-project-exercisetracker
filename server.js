@@ -29,7 +29,7 @@ let Exercise = new mongoose.model("Exercise", new mongoose.Schema({
  * GET /api/users/:_id/logs?[from][&amp;to][&amp;limit]
  */
 app.get('/api/users/:_id/logs', (req, res) => {
-
+  console.log(req.query);
   // Find the user..
   User.findById(req.params._id, (err, user) => {
     if (err) {
@@ -37,11 +37,11 @@ app.get('/api/users/:_id/logs', (req, res) => {
     }
 
     const filter = { username: user.username };
-    if (req.query?.from) {
-      filter.from = { $gte: new Date(req.query?.from) };
+    if (req.query?.from !== undefined) {
+      filter.from = { $gte: req.query.from };
     }
-    if (req.query?.to) {
-      filter.to = { $lte: new Date(req.query?.to) };
+    if (req.query?.to !== undefined) {
+      filter.to = { $lte: req.query.to };
     }
 
     // let logs = await Exercise.aggregate([
@@ -61,10 +61,10 @@ app.get('/api/users/:_id/logs', (req, res) => {
         desc: 1,
         duration: 1,
         date: {
-          $dateToString: {
-            format: "%Y-%m-%d",
-            date: "$date",
-            onNull: (new Date("$date").toDateString())
+          $function: {
+            body: d => new Date(d).toDateString(),
+            args: ["$date"],
+            lang: "js"
           }
         },
       });
