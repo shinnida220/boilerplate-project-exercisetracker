@@ -42,12 +42,12 @@ app.get('/api/users/:_id/logs', (req, res) => {
 
     const match = { username: user.username };
     if (req.query?.from && req.query?.to) {
-      match.date = { $gte: ISODate(req.query.from), $lte: ISODate(req.query.to) };
+      match.date = { $gte: new Date(req.query.from), $lte: new Date(req.query.to) };
     } else if (req.query?.from) {
-      match.date = { $gte: ISODate(req.query.from) };
+      match.date = { $gte: new Date(req.query.from) };
     }
     else if (req.query?.to) {
-      match.date = { $lte: ISODate(req.query.to) };
+      match.date = { $lte: new Date(req.query.to) };
     }
 
     console.log(match);
