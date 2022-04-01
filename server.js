@@ -36,6 +36,9 @@ app.get('/api/users/:_id/logs', (req, res) => {
       res.json({ error: err }); res.end();
     }
 
+    if (!user) {
+      res.json({ user: user, error: err }); res.end();
+    }
     const filter = { username: user.username };
     if (req.query?.from !== undefined) {
       filter.from = { $gte: req.query.from };
