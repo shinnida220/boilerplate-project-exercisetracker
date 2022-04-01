@@ -66,7 +66,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
         date: {
           $function: {
             body: `function (isoDate) {
-              return new Date(d).toDateString();
+              return new Date(isoDate).toDateString();
             }`,
             args: ["$date"],
             lang: "js"
