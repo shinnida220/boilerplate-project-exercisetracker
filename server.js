@@ -41,7 +41,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
       filter.from = { $gte: new Date(req.query?.from) };
     }
     if (req.query?.to) {
-      filter.to = { $lte: new Date((req.query?.to) };
+      filter.to = { $lte: new Date(req.query?.to) };
     }
 
     // let logs = await Exercise.aggregate([
