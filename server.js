@@ -44,29 +44,57 @@ app.get('/api/users/:_id/logs', (req, res) => {
       filter.to = { $lte: req.query?.to };
     }
 
-    let logs = await Exercise.aggregate([
-      { $match: filter }, // Select conditions
-      {
-        $project: {
-          desc: 1,
-          duration: 1,
-          date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-        }
-      } // Fields we want selected
-    ]);
+    // let logs = await Exercise.aggregate([
+    //   { $match: filter }, // Select conditions
+    //   {
+    //     $project: {
+    //       desc: 1,
+    //       duration: 1,
+    //       date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+    //     }
+    //   } // Fields we want selected
+    // ]);
 
-    res.json({
-      username: user.username,
-      count: logs.length,
-      logs: logs
-    });
+    Exercise.aggregate().
+      match(filter).
+      project({
+        desc: 1,
+        duration: 1,
+        date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+      }).
+      exec((err, exercises) => {
+        if (err) {
+          res.json({ error: err });
+          res.end();
+        }
+
+        res.json({
+          username: user.username,
+          count: exercises.length,
+          logs: exercises
+        });
+      });
+
+    // Exercise.aggregate([
+    //   { $match: filter }, // Select conditions
+    //   {
+    //     $project: {
+    //       desc: 1,
+    //       duration: 1,
+    //       date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+    //     }
+    //   } // Fields we want selected
+    // ]).then((e, d) => {
+
+    // });
+
+    // res.json({
+    //   username: user.username,
+    //   count: logs.length,
+    //   logs: logs
+    // });
 
   });
-  const queryString = req.query;
-
-  let query =
-
-    res.sendFile(__dirname + '/views/index.html')
 });
 
 /**
