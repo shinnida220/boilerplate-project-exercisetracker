@@ -65,6 +65,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
         duration: 1,
         date: {
           $function: {
+            // https://stackoverflow.com/a/63739304/380138 - function should be quoted
             body: `function (isoDate) {
               return new Date(isoDate).toDateString();
             }`,
