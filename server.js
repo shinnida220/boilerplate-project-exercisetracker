@@ -63,7 +63,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
         date: {
           $dateToString: {
             format: "%Y-%m-%d",
-            date: "$dat",
+            date: "$date",
             onNull: (new Date("$date").toDateString())
           }
         },
