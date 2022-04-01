@@ -29,7 +29,6 @@ let Exercise = new mongoose.model("Exercise", new mongoose.Schema({
  * GET /api/users/:_id/logs?[from][&amp;to][&amp;limit]
  */
 app.get('/api/users/:_id/logs', (req, res) => {
-  console.log(req.query);
   // Find the user..
   User.findById(req.params._id, (err, user) => {
     if (err) {
@@ -49,8 +48,6 @@ app.get('/api/users/:_id/logs', (req, res) => {
     else if (req.query?.to) {
       match.date = { $lte: new Date(req.query.to) };
     }
-
-    console.log(match);
 
     let exerciseAggregate = Exercise.aggregate()
       .match(match)
