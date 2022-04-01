@@ -60,7 +60,14 @@ app.get('/api/users/:_id/logs', (req, res) => {
       .project({
         desc: 1,
         duration: 1,
-        date: { $dateToString: { format: "%Y-%m-%d", date: $date, onNull: (new Date('$date').toDateString()) } },
+        date: {
+          $dateToString: {
+            format: "%Y-%m-%d",
+            date: "$dat",
+            onNull: (new Date("$date").toDateString()),
+            onError: (new Date("$date").toDateString())
+          }
+        },
       });
 
     if (req.query?.limit) {
