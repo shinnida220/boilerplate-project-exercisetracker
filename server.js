@@ -55,14 +55,20 @@ app.get('/api/users/:_id/logs', (req, res) => {
     //   } // Fields we want selected
     // ]);
 
-    Exercise.aggregate().
-      match(filter).
-      project({
+    let exerciseAggregate = Exercise.aggregate()
+      .match(filter)
+      .project({
         desc: 1,
         duration: 1,
-        date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-      }).
-      exec((err, exercises) => {
+        date: { $dateToString: { format: "%Y-%m-%d", date: null, onNull: Date($date).toDateString() } },
+      });
+
+    if (req.query?.limit) {
+      exerciseAggregate.limit(Number(req.query?.limit));
+    }
+
+    exerciseAggregate
+      .exec((err, exercises) => {
         if (err) {
           res.json({ error: err });
           res.end();
